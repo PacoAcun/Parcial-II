@@ -1,4 +1,4 @@
-from avl_tree import Node, AVL_tree
+from AVL_tree.avl_tree import Node, AVL_tree
 
 '''
 test AVL tree
