@@ -22,7 +22,7 @@ class Node:
  
 class AVL_tree:
     """
-    BinarySearchTree object
+    AVL tree object
     Args:
         None
 
@@ -30,14 +30,65 @@ class AVL_tree:
         root(Node): pointer to first object in tree
     """
 
-    
+    def print_tree(self,root, val="data", left="left_child", right="right_child"):
+        root = self.root
+        def display(root, val=val, left=left, right=right):
+            """Returns list of strings, width, height, and horizontal coordinate of the root."""
+            # No child.
+            if getattr(root, right) is None and getattr(root, left) is None:
+                line = '%s' % getattr(root, val)
+                width = len(line)
+                height = 1
+                middle = width // 2
+                return [line], width, height, middle
+
+            # Only left child.
+            if getattr(root, right) is None:
+                lines, n, p, x = display(getattr(root, left))
+                s = '%s' % getattr(root, val)
+                u = len(s)
+                first_line = (x + 1) * ' ' + (n - x - 1) * '_' + s
+                second_line = x * ' ' + '/' + (n - x - 1 + u) * ' '
+                shifted_lines = [line + u * ' ' for line in lines]
+                return [first_line, second_line] + shifted_lines, n + u, p + 2, n + u // 2
+
+            # Only right child.
+            if getattr(root, left) is None:
+                lines, n, p, x = display(getattr(root, right))
+                s = '%s' % getattr(root, val)
+                u = len(s)
+                first_line = s + x * '_' + (n - x) * ' '
+                second_line = (u + x) * ' ' + '\\' + (n - x - 1) * ' '
+                shifted_lines = [u * ' ' + line for line in lines]
+                return [first_line, second_line] + shifted_lines, n + u, p + 2, u // 2
+
+            # Two children.
+            left, n, p, x = display(getattr(root, left))
+            right, m, q, y = display(getattr(root, right))
+            s = '%s' % getattr(root, val)
+            u = len(s)
+            first_line = (x + 1) * ' ' + (n - x - 1) * '_' + s + y * '_' + (m - y) * ' '
+            second_line = x * ' ' + '/' + (n - x - 1 + u + y) * ' ' + '\\' + (m - y - 1) * ' '
+            if p < q:
+                left += [n * ' '] * (q - p)
+            elif q < p:
+                right += [m * ' '] * (p - q)
+            zipped_lines = zip(left, right)
+            lines = [first_line, second_line] + [a + u * ' ' + b for a, b in zipped_lines]
+            return lines, n + m + u, max(p, q) + 2, n + u // 2
+
+        lines, *_ = display(root, val, left, right)
+        for line in lines:
+            print(line)
+            
+            
     def __init__(self):
         self.root = None
 
     def delete(self, value: int):
         """
         Delete function
-        deletes a node from the binary search tree object 
+        deletes a node from the AVL tree object 
 
         Args:
             value (int): value 
@@ -91,7 +142,7 @@ class AVL_tree:
         return subtree
      
     def insert(self, value: int):
-        """Inserts node in the binary search tree class 
+        """Inserts node in the AVL tree class 
 
         Args:
             value (int): value to add to the tree
@@ -237,7 +288,7 @@ class AVL_tree:
             return root.left_child.height 
         return root.left_child.height - root.right_child.height
     
-    def leftRotate(self, subtree):
+    def leftRotate(self, subtree: Node):
         """_summary_
 
         Args:
@@ -256,7 +307,7 @@ class AVL_tree:
         y.height = 1 + max(self.getHeight(y.left_child),self.getHeight(y.right_child))
         return y
         
-    def rightRotate(self, subtree):
+    def rightRotate(self, subtree: Node):
             """_summary_
 
             Args:
@@ -277,7 +328,7 @@ class AVL_tree:
             
             return y
     
-    def getHeight(self, node):
+    def getHeight(self, node: Node):
         """Returns hight of object
         """
         if node == None:

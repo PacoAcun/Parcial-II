@@ -55,3 +55,11 @@ for key in test_keys:
 print('---------------------------------------')
 print('Current root: {}'.format(avl.root))
 print('---------------------------------------')
+
+print('\n*** Traversing Tree ***\n')
+avl.traverse(avl.root)
+
+
+avl.delete(16)
+avl.print_tree(avl.root, "data")
+
