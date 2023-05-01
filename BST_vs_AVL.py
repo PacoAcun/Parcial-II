@@ -12,7 +12,7 @@ avl_unpick = unpickle_object('./saved_avl')
 print('\n*** Searching ***\n')
 search_values = []
 
-for _ in range(500000):
+for _ in range(10000):
     x = random.randint(0, 10000000)
     search_values.append(x)
 
