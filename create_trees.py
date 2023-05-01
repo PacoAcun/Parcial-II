@@ -29,7 +29,6 @@ for _ in range(n):
     print('Nodes inserted: {}'.format(counter))
     print()
 
-
 pickle_object(bst, './saved_bst')
 pickle_object(avl, './saved_avl')
 print('-----------Completed-----------')

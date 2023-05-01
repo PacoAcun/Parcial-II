@@ -31,7 +31,6 @@ for value in search_values:
 end = time.time()
 avl_time = end - start
 print()
-
 print('-------------------------------------------------------------')
 print('BST ejecution time...: {}'.format(bst_time))
 print('-------------------------------------------------------------')
