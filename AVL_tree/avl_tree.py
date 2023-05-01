@@ -1,251 +1,285 @@
-'''
-AVL Tree
-'''
-
 class Node:
+    """
+    Node object
+    Args:
+        data (str): string value to store in node
 
+    Attributes:
+        data (str): value stored in node
+        left_child (Node): pointer to node to the left
+        right_child (Node): pointer to node to the right
+    """
     def __init__(self, data: int):
-        """
-        Initialize the node with data and children
-
-        :param data: data to be stored in the node
-        """
         self.data = data
         self.left_child = None
         self.right_child = None
         self.height = 1
 
+
     def __repr__(self):
         return '({})'.format(self.data)
 
+ 
 class AVL_tree:
     """
-    AVL tree class.
+    BinarySearchTree object
+    Args:
+        None
+
+    Attributes:
+        root(Node): pointer to first object in tree
     """
 
+    
     def __init__(self):
-        """
-        Initialize the tree.
-        """
         self.root = None
 
-    def insert(self, data: int):
+    def delete(self, value: int):
         """
-        Insert a new node with data.
+        Delete function
+        deletes a node from the binary search tree object 
 
-        :param data: data to be stored in the new node
+        Args:
+            value (int): value 
         """
-        self.root = self._insert(data, self.root)
-        return self.root
-    
-    def _insert(self, data: int, node: Node):
-        """
-        Insert a new node with data into the tree.
-
-        :param data: data to be stored in the new node
-        :param node: current node
-        """
-        if node is None:
-            return Node(data)
-        elif data < node.data:
-            node.left_child = self._insert(data, node.left_child)
-        else:
-            node.right_child = self._insert(data, node.right_child)
-        return node
-    
-    def delete(self, data: int):
-        """
-        Delete a node with data from the tree.
-
-        :param data: data to be deleted
-        """
-        self.root = self._delete(data, self.root)
-        return self.root
-    
-    def _delete(self, data: int, node: Node):
-        """
-        Delete a node with data from the tree.
-
-        :param data: data to be deleted
-        :param node: current node
-        """
-        if node is None:
-            return node
-        elif data < node.data:
-            node.left_child = self._delete(data, node.left_child)
-        elif data > node.data:
-            node.right_child = self._delete(data, node.right_child)
-        else:
-            if node.left_child is None:
-                return node.right_child
-            elif node.right_child is None:
-                return node.left_child
-            else:
-                node.data = self.get_min(node.right_child)
-                node.right_child = self._delete(node.data, node.right_child)
-        return node
-    
-    def get_min(self, node: Node):
-        """
-        Get the minimum value in the tree.
-
-        :param node: current node
-        """
-        while node.left_child:
-            node = node.left_child
-        return node.data
-    
-    def get_max(self, node: Node):
-        """
-        Get the maximum value in the tree.
-
-        :param node: current node
-        """
-        while node.right_child:
-            node = node.right_child
-        return node.data
-    
-    def search(self, data: int):
-        """
-        Search for a node with data in the tree.
-
-        :param data: data to be searched
-        """
-        return self._search(data, self.root)
-    
-    def _search(self, data: int, node: Node):
-        """
-        Search for a node with data in the tree.
-
-        :param data: data to be searched
-        :param node: current node
-        """
-        if node is None:
-            return False
-        elif data == node.data:
-            return True
-        elif data < node.data:
-            return self._search(data, node.left_child)
-        else:
-            return self._search(data, node.right_child)
         
-    def traverse(self, subtree: Node) -> None:
-        """
-        Traverse the tree.
+        if self.root is not None:
+            self._delete(value, self.root)
+    
+    def _delete (self, value: int, subtree: Node):
 
-        :param subtree: current subtree
+        if subtree is None:
+            return subtree
+
+        if value < subtree.data:
+            subtree.left_child = self._delete(value, subtree.left_child)
+        
+        if value > subtree.data:
+            subtree.right_child = self._delete(value, subtree.right_child)
+
+        if value == subtree.data:
+            
+            if subtree.left_child is None:
+                temp = subtree.right_child
+                subtree = None
+                return temp
+            
+            if subtree.right_child is None:
+                temp = subtree.left_child
+                subtree = None
+                return temp
+            
+            temp = self.find_max(subtree.left_child)
+            subtree.data = temp.data
+            subtree.right_child = self._delete(temp.data, subtree.right_child)
+
+        subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
+        balanceFactor = self.getBalance(subtree)
+
+        if balanceFactor > 1:
+            if self.getBalance(subtree.left_child) >= 0:
+                return self.rightRotate(subtree)
+            else:
+                subtree.left_child = self.leftRotate(subtree.left_child)
+                return self.rightRotate(subtree)
+        if balanceFactor < -1:
+            if self.getBalance(subtree.right_child) <= 0:
+                return self.leftRotate(subtree)
+            else:
+                subtree.right = self.rightRotate(subtree.right_child)
+                return self.leftRotate(subtree)
+        return subtree
+     
+    def insert(self, value: int):
+        """Inserts node in the binary search tree class 
+
+        Args:
+            value (int): value to add to the tree
         """
+
+        if self.root is None:
+            self.root = Node(value)
+
+        else:
+            self._insert(value, self.root)
+            
+        
+    def _insert(self, value: int, subtree: Node):
+
+        if subtree == None:
+            return Node(value)
+        
+        elif value < subtree.data:
+            subtree.left_child = self._insert(value, subtree.left_child)
+        
+        elif value > subtree.data:
+            subtree.right_child = self._insert(value, subtree.right_child)
+
+        else:
+            print('Value already exists in tree...')
+        
+        subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
+        balanceFactor = self.getBalance(subtree)
+        
+        
+        if balanceFactor > 1:
+            #CASE2 RR
+            if value < subtree.left_child.data:
+                return self.rightRotate(subtree)
+            #CASE4 LR
+            else:
+                subtree.left_child = self.leftRotate(subtree.left_child)
+                a = self.rightRotate(subtree)
+
+
+                return a
+        #LEFT
+        
+        
+        if balanceFactor < -1:
+            #CASE1 LL
+            if value > subtree.right_child.data:
+                a = self.leftRotate(subtree)
+                return a
+           
+            #CASE3 RL
+            else:
+                subtree.right_child = self.rightRotate(subtree.right_child)
+                return self.leftRotate(subtree)
+        
+        return subtree
+        
+    def traverse(self, subtree: Node):
+        """Traverse function
+
+        Args:
+            subtree (Node): Node for traverse
+        """
+        
         print(subtree)
-
+        
         if subtree.left_child is not None:
             self.traverse(subtree.left_child)
 
         if subtree.right_child is not None:
             self.traverse(subtree.right_child)
+    
 
-    def LL_rotation(self):
-        """
-        Perform a left-left rotation.
-        """
-        self.root = self._LL_rotation(self.root)
-        return self.root
-    
-    def _LL_rotation(self, node: Node):
-        """
-        Perform a left-left rotation.
+    def search(self, key: int) -> bool:
+        """Search function that searches a key in tree
 
-        :param node: current node
-        """
-        temp = node.left_child
-        node.left_child = temp.right_child
-        temp.right_child = node
-        return temp
-    
-    def RR_rotation(self):
-        """
-        Perform a right-right rotation.
-        """
-        self.root = self._RR_rotation(self.root)
-        return self.root
-    
-    def _RR_rotation(self, node: Node):
-        """
-        Perform a right-right rotation.
+        Args:
+            key (int): value to be searched for
 
-        :param node: current node
+        Returns:
+            bool: True if it finds the value on the tree
         """
-        temp = node.right_child
-        node.right_child = temp.left_child
-        temp.left_child = node
-        return temp
-    
-    def LR_rotation(self):
-        """
-        Perform a left-right rotation.
-        """
-        self.root = self._LR_rotation(self.root)
-        return self.root
-    
-    def _LR_rotation(self, node: Node):
-        """
-        Perform a left-right rotation.
 
-        :param node: current node
-        """
-        node.left_child = self._RR_rotation(node.left_child)
-        return self._LL_rotation(node)
-    
-    def RL_rotation(self):
-        """
-        Perform a right-left rotation.
-        """
-        self.root = self._RL_rotation(self.root)
-        return self.root
-    
-    def _RL_rotation(self, node: Node):
-        """
-        Perform a right-left rotation.
+        if self.root is None:
+            return False
+        
+        else:
+            return self._search(key, self.root)
 
-        :param node: current node
-        """
-        node.right_child = self._LL_rotation(node.right_child)
-        return self._RR_rotation(node)
-    
-    def balance(self, node: Node):
-        """
-        Balance the tree.
+    def _search(self, key: int, subtree: Node) -> bool:
 
-        :param node: current node
-        """
-        balance = self.getbalance(node)
-        if balance > 1:
-            if self.getbalance(node.left_child) > 0:
-                node = self.LL_rotation(node)
-            else:
-                node = self.LR_rotation(node)
-        elif balance < -1:
-            if self.getbalance(node.right_child) < 0:
-                node = self.RR_rotation(node)
-            else:
-                node = self.RL_rotation(node)
-        return node
-    
-    def getbalance(self, node: Node):
-        """
-        Get the balance of the tree.
+        if key == subtree.data:
+            return True
+        
+        elif (key < subtree.data) and (subtree.left_child is not None):
+            return self._search(key, subtree.left_child)
+        
+        elif (key > subtree.data) and (subtree.right_child is not None):
+            return self._search(key, subtree.right_child)
 
-        :param node: current node
+        else:
+            return False
+        
+
+    def find_min(self, subtree: Node) -> int:
+        """Function that finds min value
+
+        Args:
+            subtree (Node): Subtree where the search begins
+
+        Returns:
+            int: returns the Node with the minimun value
+
         """
-        if node is None:
+
+        while subtree.left_child is not None:
+            subtree = subtree.left_child
+
+        return subtree
+
+
+    def find_max(self, subtree: Node) -> int:
+        """Function that finds max value
+
+        Args:
+            subtree (Node): Subtree where the search begins
+
+        Returns:
+            int: returns the Node with the maximun value
+            
+        """
+        while subtree.right_child is not None:
+            subtree = subtree.right_child
+
+        return subtree
+    
+    def getBalance(self, root):
+        if root.left_child == None and root.right_child == None:
             return 0
-        return self.getheight(node.left_child) - self.getheight(node.right_child)
+        elif root.left_child == None:
+            return 0 - root.right_child.height
+        elif root.right_child == None:
+            return root.left_child.height 
+        return root.left_child.height - root.right_child.height
     
-    def getheight(self, node: Node):
-        """
-        Get the height of the tree.
+    def leftRotate(self, subtree):
+        """_summary_
 
-        :param node: current node
+        Args:
+            subtree (node): core subtree
+
+        Returns:
+            node: new core node to make the branch balanced
         """
-        if node is None:
+        y = subtree.right_child
+        if self.root == subtree:
+            self.root = y
+        temp = y.left_child
+        y.left_child = subtree
+        subtree.right_child = temp
+        subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
+        y.height = 1 + max(self.getHeight(y.left_child),self.getHeight(y.right_child))
+        return y
+        
+    def rightRotate(self, subtree):
+            """_summary_
+
+            Args:
+                subtree (node): core subtree
+
+            Returns:
+                node: new core node to make the branch balanced
+            """
+            
+            y = subtree.left_child
+            if self.root == subtree:
+                self.root = y
+            temp = y.right_child
+            y.right_child = subtree
+            subtree.left_child = temp
+            subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
+            y.height = 1 + max(self.getHeight(y.left_child),self.getHeight(y.right_child))
+            
+            return y
+    
+    def getHeight(self, node):
+        """Returns hight of object
+        """
+        if node == None:
             return 0
-        return max(self.getheight(node.left_child), self.getheight(node.right_child)) + 1
+        return node.height

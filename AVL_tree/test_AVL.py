@@ -1,4 +1,5 @@
-from AVL_tree.avl_tree import Node, AVL_tree
+from avl_tree import Node, AVL_tree
+import random
 
 '''
 test AVL tree
@@ -40,15 +41,17 @@ for key in test_keys:
 
 # Min-Max 
 print('\n*** Searching for min-max in Tree ***\n')
-print('Min: {}'.format(avl.get_min(avl.root)))
-print('Max: {}'.format(avl.get_max(avl.root)))
+print('Min: {}'.format(avl.find_min(avl.root)))
+print('Max: {}'.format(avl.find_max(avl.root)))
 
 # Delete
+
 print('\n*** Deleting Nodes in Tree ***\n')
 
 for key in test_keys:
     print('Deleting node with value: {}'.format(key))
     avl.delete(key)
 
+print('---------------------------------------')
 print('Current root: {}'.format(avl.root))
-
+print('---------------------------------------')
