@@ -4,6 +4,7 @@ from data_persistence import pickle_object, unpickle_object
 import random
 import time
 
+print('Unpicking trees....')
 bst_unpick = unpickle_object('./saved_bst')
 avl_unpick = unpickle_object('./saved_avl')
 
