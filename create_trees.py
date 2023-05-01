@@ -32,3 +32,4 @@ for _ in range(n):
 
 pickle_object(bst, './saved_bst')
 pickle_object(avl, './saved_avl')
+print('-----------Completed-----------')
