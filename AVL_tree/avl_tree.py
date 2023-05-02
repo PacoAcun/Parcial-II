@@ -22,14 +22,13 @@ class Node:
  
 class AVL_tree:
     """
-    AVL tree object
+    AVL object
     Args:
         None
 
     Attributes:
         root(Node): pointer to first object in tree
     """
-
     def print_tree(self,root, val="data", left="left_child", right="right_child"):
         root = self.root
         def display(root, val=val, left=left, right=right):
@@ -80,8 +79,8 @@ class AVL_tree:
         lines, *_ = display(root, val, left, right)
         for line in lines:
             print(line)
-            
-            
+
+    
     def __init__(self):
         self.root = None
 
@@ -99,14 +98,13 @@ class AVL_tree:
     
     def _delete (self, value: int, subtree: Node):
 
-        if subtree is None:
-            return subtree
-
         if value < subtree.data:
             subtree.left_child = self._delete(value, subtree.left_child)
+ 
         
         if value > subtree.data:
             subtree.right_child = self._delete(value, subtree.right_child)
+
 
         if value == subtree.data:
             
@@ -122,7 +120,7 @@ class AVL_tree:
             
             temp = self.find_max(subtree.left_child)
             subtree.data = temp.data
-            subtree.right_child = self._delete(temp.data, subtree.right_child)
+            subtree.left_child = self._delete(temp.data, subtree.left_child)
 
         subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
         balanceFactor = self.getBalance(subtree)
