@@ -17,17 +17,14 @@ print('Current root: {}'.format(avl.root)) # empty root
 
 # Inserts
 print('\n*** Inserting Nodes in Tree ***\n')
-n = 1000000
-counter = 0
+n = 10000000
+
 
 for _ in range(n):
     x = random.randint(0, 1000000000000)
-    print('Inserting node with value... {}'.format(x))
     bst.insert(x)
     avl.insert(x)
-    counter += 1
-    print('Nodes inserted: {}'.format(counter))
-    print()
+    
 
 pickle_object(bst, './saved_bst')
 pickle_object(avl, './saved_avl')

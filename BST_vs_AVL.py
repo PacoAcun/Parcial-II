@@ -8,30 +8,32 @@ print('Unpicking trees....')
 bst_unpick = unpickle_object('./saved_bst')
 avl_unpick = unpickle_object('./saved_avl')
 
+print(avl_unpick.root.height)
+
+
 
 # Search
 print('\n*** Searching ***\n')
 search_values = []
 
-for _ in range(500000):
-    x = random.randint(0, 10000000)
+for _ in range(5000000):
+    x = random.randint(0, 1000000000)
     search_values.append(x)
 
 start = time.time()
 for value in search_values:
-    print('Searching for value: {}'.format(value))
-    print('BST: {}'.format(bst_unpick.search(value)))
+    bst_unpick.search(value)
+
 end = time.time()
 bst_time = end - start
 print()
 
 start = time.time()
 for value in search_values:
-    print('Searching for value: {}'.format(value))
-    print('AVL: {}'.format(avl_unpick.search(value)))
+    avl_unpick.search(value)
+
 end = time.time()
 avl_time = end - start
-print()
 print('-------------------------------------------------------------')
 print('BST ejecution time...: {}'.format(bst_time))
 print('-------------------------------------------------------------')

@@ -9,6 +9,7 @@ test AVL tree
 print('\n*** Instantiate avl ***\n')
 avl = AVL_tree()
 for i in range(100):
+    x = random.randint(0, 100)
     avl.insert(i)
 
 
@@ -21,6 +22,5 @@ avl.print_tree(avl.root, "data")
     #avl.delete(i)
 
 
-avl.print_tree(avl.root, "data")
 
 
