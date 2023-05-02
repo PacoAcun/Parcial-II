@@ -17,11 +17,11 @@ print('Current root: {}'.format(avl.root)) # empty root
 
 # Inserts
 print('\n*** Inserting Nodes in Tree ***\n')
-n = 10000000
+n = 1000000
 counter = 0
 
 for _ in range(n):
-    x = random.randint(0, 10000000)
+    x = random.randint(0, 1000000000000)
     print('Inserting node with value... {}'.format(x))
     bst.insert(x)
     avl.insert(x)
