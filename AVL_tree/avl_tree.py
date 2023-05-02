@@ -98,22 +98,25 @@ class AVL_tree:
     
     def _delete (self, value: int, subtree: Node):
 
-        if value < subtree.data:
+        if subtree is None:
+            return subtree
+
+        elif value < subtree.data:
             subtree.left_child = self._delete(value, subtree.left_child)
  
         
-        if value > subtree.data:
+        elif value > subtree.data:
             subtree.right_child = self._delete(value, subtree.right_child)
 
 
-        if value == subtree.data:
+        elif value == subtree.data:
             
             if subtree.left_child is None:
                 temp = subtree.right_child
                 subtree = None
                 return temp
             
-            if subtree.right_child is None:
+            elif subtree.right_child is None:
                 temp = subtree.left_child
                 subtree = None
                 return temp
@@ -121,9 +124,13 @@ class AVL_tree:
             temp = self.find_max(subtree.left_child)
             subtree.data = temp.data
             subtree.left_child = self._delete(temp.data, subtree.left_child)
+        
+        if subtree is None:
+            return subtree
 
         subtree.height = 1 + max(self.getHeight(subtree.left_child),self.getHeight(subtree.right_child))
         balanceFactor = self.getBalance(subtree)
+     
 
         if balanceFactor > 1:
             if self.getBalance(subtree.left_child) >= 0:
@@ -278,6 +285,7 @@ class AVL_tree:
         return subtree
     
     def getBalance(self, root):
+        
         if root.left_child == None and root.right_child == None:
             return 0
         elif root.left_child == None:

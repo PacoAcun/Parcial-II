@@ -8,14 +8,19 @@ test AVL tree
 # Instantiate avl
 print('\n*** Instantiate avl ***\n')
 avl = AVL_tree()
-for i in range(50):
+for i in range(100):
     avl.insert(i)
 
 
 avl.print_tree(avl.root, "data")
-avl.delete(31)
-avl.delete(30)
-avl.delete(29)
+#avl.delete(63)
+#print(avl.search(90))
+#print(avl.search(143))
+
+#for i in range(80):
+    #avl.delete(i)
+
 
 avl.print_tree(avl.root, "data")
+
 
